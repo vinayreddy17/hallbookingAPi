@@ -1,0 +1,137 @@
+Hall Booking API Documentation
+
+This API allows you to manage room bookings for a hall or event space. You can create rooms, book rooms for customers, list rooms with their booking status, list live customer stats, and retrieve booking history for customers.
+
+1. Create a Room
+
+- Endpoint: POST /rooms/createRoom
+- Description: Creates a new room with the provided details.
+- Request Body:
+  {
+    "roomNo": "string",
+    "seats": "number",
+    "amenities": ["string"],
+    "price": "number"
+  }
+- Response:
+  - Success (201): Room created successfully.
+    {
+      "message": "Room Created successfully",
+      "room": "string" // Room number
+    }
+  - Error (500): Failed to create room.
+    {
+      "error": "Failed to create room"
+    }
+
+2. List Rooms with Booking Status
+
+- Endpoint: GET /rooms/listRooms
+- Description: Lists all rooms with their booking status and, if booked, the customer name, date, start time, and end time.
+- Response:
+  - Success (200): Rooms listed successfully.
+    {
+      "rooms": [
+        {
+          "roomName": "string",
+          "bookedStatus": "string", // 'available' or 'booked'
+          "customerName": "string", // Only present if booked
+          "date": "string", // Only present if booked
+          "startTime": "string", // Only present if booked
+          "endTime": "string" // Only present if booked
+        }
+      ]
+    }
+  - Error (500): Failed to list rooms.
+    {
+      "error": "Failed to list rooms"
+    }
+
+3. List Customers with Booked Data
+
+- Endpoint: GET /customers/current
+- Description: Lists all customers who have booked a room along with their booking details.
+- Response:
+  - Success (200): Customers listed successfully.
+    {
+      "customers": [
+        {
+          "customerName": "string",
+          "roomName": "string",
+          "date": "string",
+          "startTime": "string",
+          "endTime": "string"
+        }
+      ]
+    }
+  - Error (500): Failed to list customers with booked data.
+    {
+      "error": "Failed to list customers with booked data"
+    }
+
+4. Get Customer Bookings
+
+- Endpoint: GET /customers/allbookings/:customerName
+- Description: Retrieves all bookings of a specific customer.
+- Request Parameter:
+  - customerName: The name of the customer.
+- Response:
+  - Success (200): Bookings retrieved successfully.
+    {
+      "customerName": "string",
+      "numberOfBookings": "number",
+      "bookings": [
+        {
+          "roomName": "string",
+          "bookingDate": "string",
+          "bookingStatus": "string",
+          "bookingId": "string",
+          "startTime": "string",
+          "endTime": "string",
+          "date": "string"
+        }
+      ]
+    }
+  - Error (404): Customer not found.
+    {
+      "error": "Customer not found"
+    }
+  - Error (500): Failed to retrieve customer bookings.
+    {
+      "error": "Failed to retrieve customer bookings"
+    }
+
+5. Book Room
+
+- Endpoint: POST /bookings/bookroom
+- Description: Books a room for a customer.
+- Request Body:
+  {
+    "CustomerName": "string",
+    "RoomNo": "string",
+    "startTime": "string",
+    "shifts": "number"
+  }
+- Response:
+  - Success (200): Room booked successfully.
+    {
+      "message": "Room booked successfully",
+      "booking": {
+        "roomName": "string",
+        "bookingDate": "string",
+        "bookingStatus": "string",
+        "bookingId": "string",
+        "startTime": "string",
+        "endTime": "string",
+        "date": "string"
+      }
+    }
+  - Error (404): Room not found.
+    {
+      "error": "Room not found"
+    }
+  - Error (400): Room is not available for booking.
+    {
+      "error": "Room is not available for booking"
+    }
+  - Error (500): Internal server error.
