@@ -3,6 +3,9 @@ import customerModel from "../models/customerModel.js";
 import roomModel from "../models/roomModel.js";
 
 const bookRoom = async ( req, res) => {
+     const {CustomerName, RoomNo, startTime, shifts }=req.body
+  const bookingDate = new Date(); 
+
 
   const room = await roomModel.findOne({ roomNo: RoomNo });
 
@@ -14,8 +17,6 @@ const bookRoom = async ( req, res) => {
     return res.status(400).json({ error: 'Room is not available for booking' });
   }
   
-   const {CustomerName, RoomNo, startTime, shifts }=req.body
-  const bookingDate = new Date(); 
 
   try {
     
